@@ -25,7 +25,7 @@ version by default. Phase 1 uses only the standard library; pytest installs clea
 **Decision:** One config module is the only place that reads environment variables.
 Values that differ per machine or are secret (data folder, later database URL and secret
 key) come from the environment; locally they are loaded from `.env` with `python-dotenv`.
-Rules of the app (box intervals, retire threshold) are constants in the same module.
+Rules of the app (number of boxes, box intervals) are constants in the same module.
 Harmless settings have defaults; secrets have none and fail loudly if missing.
 **Options:** plain `os.environ` with defaults (zero dependencies) · `python-dotenv`.
 **Why:** `python-dotenv` is the common practice for local development and removes the need
