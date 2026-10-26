@@ -1,8 +1,9 @@
-# 4. Domain model (draft)
+# 4. Domain model
 
 The classes of the Leitbox core: what each one knows (attributes), what it does (methods),
 and how they're related. This is the **domain** only: no files, database or user interface
-(see [requirements](../requirements.md) N8).
+(see [requirements](../requirements.md) N8). It lives in the `domain/` package of the
+[architecture](05-architecture.md).
 
 ```mermaid
 classDiagram
