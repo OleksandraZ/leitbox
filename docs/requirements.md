@@ -1,7 +1,6 @@
 # Requirements — Leitbox
 
-> Status: **draft** (Phase 0). Items marked *(proposed)* are suggestions not confirmed yet;
-> *open* items are listed in §9.
+> Questions that are still open are listed in §9.
 
 ## 1. Problem
 
@@ -142,13 +141,6 @@ answer, so that I review the right cards at the right time.
 - **AC-04.7** Given I answer a card "didn't know", when I continue the session, then that
   card doesn't appear again in this session (R16).
 
-### US-06 Delete a deck
-As a learner, I want to delete a deck, so that I can remove a wrong import or re-import a
-corrected file. (Must: the MVP's typo workaround in §3 needs it.)
-- **AC-06.1** Given a deck with 50 cards, when I delete it and confirm the warning, then the
-  deck and its cards are gone, and their recorded reviews are kept (R18).
-- **AC-06.2** Given a deck, when I choose delete and don't confirm, then nothing changes.
-
 ### US-05 Cards are scheduled by my answers
 As a learner, I want each answer to move the card to the right box and schedule its next
 review, so that cards I know come back less often and cards I forget come back soon.
@@ -166,6 +158,13 @@ review, so that cards I know come back less often and cards I forget come back s
   tomorrow.
 - **AC-05.7** Given any card, when I answer it, then the review is recorded with time,
   result, box before and box after (R12).
+
+### US-06 Delete a deck
+As a learner, I want to delete a deck, so that I can remove a wrong import or re-import a
+corrected file. (Must: the MVP's typo workaround in §3 needs it.)
+- **AC-06.1** Given a deck with 50 cards, when I delete it and confirm the warning, then the
+  deck and its cards are gone, and their recorded reviews are kept (R18).
+- **AC-06.2** Given a deck, when I choose delete and don't confirm, then nothing changes.
 
 ## 6. User stories — after MVP
 
@@ -193,7 +192,7 @@ Not part of the MVP; designed for now, built after the MVP (see §7).
 
 ## 7. Scope (MoSCoW)
 
-Two levels: the **MVP**, submitted for the course (deadline 2026-11-23), and the finished app,
+Two levels: the **MVP**, submitted for the course (deadline 2026-11-24), and the finished app,
 which is completed after the MVP if needed.
 
 | Feature | Stories | MVP | Finished app |
@@ -220,7 +219,7 @@ which is completed after the MVP if needed.
 | **N8** | Maintainability | The core (Leitner rules, cards, decks) contains no input/output, file, database or web code; the CLI, API and UI call the same core. Every business rule in §4 that's part of the MVP has at least one automated test. | Phase 1 |
 
 **Constraints:** Python 3.14 · standard library only in Phase 1 (plus `python-dotenv`) ·
-pytest for tests · FastAPI for the API (Phase 2) · MVP submitted by 2026-11-23 ·
+pytest for tests · FastAPI for the API (Phase 2) · MVP submitted by 2026-11-24 ·
 one developer, ~2-hour sessions.
 
 **Out of scope for now:** performance targets (no realistic baseline before the MVP exists;
