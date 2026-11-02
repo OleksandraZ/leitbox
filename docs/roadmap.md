@@ -44,20 +44,26 @@ half-built layers behind.
 
 The detailed slices are planned once Phase 1 works. Decided so far:
 
-- **Database choice first** (SQLite or TinyDB), after checking how the hosting platform keeps
-  stored data between deploys. The choice is recorded in [decisions.md](decisions.md).
+- **Database choice first** (SQLite or TinyDB). The app runs locally, so no hosting
+  constraint applies. The choice is recorded in [decisions.md](decisions.md).
 - **API before database.** The FastAPI endpoints call the same services as the command-line
   app, still using the JSON storage. Then the database comes in as a second implementation of
   the same storage interface, without changes to the API, the services or the domain. This
   order gives a working API early, and it proves that the storage is swappable.
 - Open question: should API responses use the same shape as the stored data, or their own?
 
-## Phase 3 — Deploy
+## Phase 3 — Deploy (optional)
 
-The API hosted online (FastAPI Cloud or an alternative). Planned once Phase 2 works.
+The finished app runs **locally** (API + web UI); that is the target for the CV, shown on
+GitHub with screenshots and a working setup. Hosting online is optional and only if it can
+stay free. Checked on Oct 29: FastAPI Cloud's free plan has no persistent disk, so a
+SQLite/TinyDB file would not survive restarts. The free option would be FastAPI Cloud + Neon
+(hosted Postgres), added as one more storage implementation. Paid hosting (e.g. Railway,
+$5/month) is not planned.
 
 ## Phase 4 — Web UI
 
 A simple web page for studying a deck, talking to the API only. Planned once Phase 2 works.
 
-Phases 3 and 4 may continue after the course submission: the goal is a finished, hosted app.
+Phases 3 and 4 may continue after the course submission: the goal is a finished app that
+runs locally, with free hosting as an option.
