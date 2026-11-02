@@ -32,3 +32,13 @@ Harmless settings have defaults; secrets have none and fail loudly if missing.
 to export variables by hand. On a server, variables come from the host; `python-dotenv`
 does not override variables that are already set, so the same code works in both places.
 `.env` is git-ignored; `.env.example` is committed as the template.
+
+## D-004 — Time and user passed into the scheduler
+**Decision:** `Scheduler.answer(card, knew_it, now, user_id)`. `now` is a timezone-aware
+`datetime` from the caller; the due date uses `now.date()` and the review stores `now`. The
+review gets the user's ID from the caller (the single default user in the MVP).
+**Options:** pass `today` and `now` separately · let the service create the review · leave
+`user_id` off reviews until accounts exist.
+**Why:** One `now` can't disagree with itself, and the core still never reads the clock, so
+tests choose the time. With `user_id` set from the start, reviews already have an owner when
+accounts come (and still after their card is deleted, R18), so nothing stored has to change.

@@ -40,6 +40,8 @@ classDiagram
     }
     class Review {
         +id: str
+        +card_id: str
+        +user_id: str
         +reviewed_at: datetime
         +knew_it: bool
         +box_before: int
@@ -47,7 +49,7 @@ classDiagram
     }
     class Scheduler {
         +intervals: list~int~
-        +answer(card: Card, knew_it: bool, today: date) Review
+        +answer(card: Card, knew_it: bool, now: datetime, user_id: str) Review
     }
     class CardStatus {
         <<enumeration>>
@@ -90,8 +92,10 @@ shared and demo are used after the MVP (R14).
 
 **Scheduler.** Applies the Leitner rules (R3–R6). It's created with the intervals from the
 configuration (one per box, so the number of boxes is the length of the list). Its `answer`
-method takes a card, the learner's self-assessment and today's date, moves the card to its new
-box (or retires it), sets the new due date, and returns a **Review**. The rules live here and
+method takes a card, the learner's self-assessment, the current time (`now`) and the learner's
+ID. It moves the card to its new box (or retires it), sets the new due date from `now.date()`,
+and returns a **Review** stamped with `now`. Passing one `now` instead of a separate date and
+time means the two can never disagree. The rules live here and
 not in `Card`, so the intervals stay in one place and new card types don't change the rules.
 
 **Review.** The record of one answer (R12): when, the result, and the box before and after.
@@ -99,11 +103,12 @@ It doesn't change anything itself; it's written after the card has changed, and 
 that statistics will be built from after the MVP. Reviews are **kept when their card is
 deleted** (R18), so statistics don't change after the fact: that's why a review points to
 `0..1` cards (the card may be gone) and directly to its user (the path through card, deck and
-project may no longer exist).
+project may no longer exist). It stores both as IDs (`card_id`, `user_id`), not as objects, so
+it still makes sense after the card is deleted.
 
 **After the MVP** these are added without changing the classes above: `Deck.copy_to(project)`
 and sharing (R14, R15), editing and deleting single cards (US-12), resetting a deck (US-11), deleting a project (US-13),
 a timezone on `User` (N2).
 
-`today` is always passed in, never read from the clock inside the core, so tests can choose
-any date.
+`today` (or `now`) is always passed in, never read from the clock inside the core, so tests
+can choose any date.
