@@ -1,6 +1,6 @@
 from leitbox.domain.review import Review
 from leitbox.domain.card import Card, CardStatus
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 
 

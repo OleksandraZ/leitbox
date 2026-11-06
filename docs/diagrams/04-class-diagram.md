@@ -16,7 +16,6 @@ classDiagram
         +id: str
         +name: str
         +decks: list~Deck~
-        +rename(new_name: str)
         +add_deck(deck: Deck)
     }
     class Deck {
@@ -24,7 +23,6 @@ classDiagram
         +name: str
         +visibility: Visibility
         +cards: list~Card~
-        +rename(new_name: str)
         +add_card(card: Card)
         +due_cards(today: date) list~Card~
     }
@@ -106,7 +104,7 @@ deleted** (R18), so statistics don't change after the fact: that's why a review 
 project may no longer exist). It stores both as IDs (`card_id`, `user_id`), not as objects, so
 it still makes sense after the card is deleted.
 
-**After the MVP** these are added without changing the classes above: `Deck.copy_to(project)`
+**After the MVP** these are added without changing the classes above: renaming projects and decks, `Deck.copy_to(project)`
 and sharing (R14, R15), editing and deleting single cards (US-12), resetting a deck (US-11), deleting a project (US-13),
 a timezone on `User` (N2).
 
