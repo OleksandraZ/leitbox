@@ -1,4 +1,6 @@
 
+import pytest
+
 from leitbox.domain.deck import Deck
 from leitbox.domain.project import Project
 
@@ -18,3 +20,16 @@ def test_add_deck_to_project_and_check_len():
     project.add_deck(deck)
 
     assert len(project.decks) == 1 
+
+def test_project_with_spaces_only_name_is_refused():
+    with pytest.raises(ValueError):
+        Project('   ')
+        
+        
+def test_project_empty_name_is_refused():
+    with pytest.raises(ValueError):
+        Project('')
+
+def test_project_trimmed_name():
+    project = Project(' P ')
+    assert project.name == 'P'

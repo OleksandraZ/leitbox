@@ -11,6 +11,7 @@ classDiagram
         +id: str
         +name: str
         +projects: list~Project~
+        +add_project(project: Project)
     }
     class Project {
         +id: str
@@ -75,7 +76,9 @@ classDiagram
 **Ownership.** A **user** owns projects; a **project** contains decks; a **deck** contains
 cards. Each deck belongs to exactly one project and each card to exactly one deck (R13). The
 filled diamond (composition) means the parts don't live on their own: deleting a project
-deletes its decks, and deleting a deck deletes its cards, after a warning (R17). In the MVP there is a single default user, but every project already has
+deletes its decks, and deleting a deck deletes its cards, after a warning (R17). `User.add_project` refuses a project name the user already has
+(ignoring case and spaces at the ends), and a project refuses an empty name (D-006).
+In the MVP there is a single default user, but every project already has
 an owner, so accounts can be added after the MVP without changing the model.
 
 **Card.** Holds the question and answer, its Leitner **box** (1–5), its **due** date and its

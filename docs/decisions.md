@@ -42,3 +42,30 @@ review gets the user's ID from the caller (the single default user in the MVP).
 **Why:** One `now` can't disagree with itself, and the core still never reads the clock, so
 tests choose the time. With `user_id` set from the start, reviews already have an owner when
 accounts come (and still after their card is deleted, R18), so nothing stored has to change.
+
+## D-005 — JSON storage: one nested file, one repository per aggregate
+**Decision:** Phase 1 stores everything in one file, `DATA_DIR/leitbox.json`. Each user is
+stored with its projects, decks and cards nested inside, the same shape as the domain
+classes. Reviews will be a separate list in the same file (slice 4), because they must outlive
+their cards (R18). The storage interface is a `UserRepository` with `get(user_id)` and
+`save(user)`; the JSON implementation reads and rewrites the whole file. Converting objects
+to and from dicts lives in `storage/`, not in the domain.
+**Options:** one nested file · one file per entity (projects, decks, cards, reviews as flat
+lists linked by IDs, like database tables).
+**Why:** The nested shape needs no extra ID fields on `Deck` or `Card` and no code to rebuild
+the tree on load, so slice 1 stays small. Rewriting the whole file is fine at this size (one
+learner, N5 caps a deck at 2,000 cards). The database in Phase 2 is a second implementation of
+the same interface; it will use tables with foreign keys internally.
+**Consequence:** Every save rewrites the file, so a crash during a write could damage it. This
+matters for N1 and is handled in slice 4 at the latest (write to a temporary file, then
+replace).
+
+## D-006 — Project name rules live in the domain
+**Decision:** A `Project` refuses an empty name when it's created; `User.add_project` refuses
+a name the user already has. Both raise `ValueError`. Names are trimmed (spaces at the ends
+are removed) and compared ignoring upper/lower case, so " german" is a duplicate of "German".
+The trimmed name is stored as typed.
+**Options:** checks in the service · exact or case-sensitive comparison.
+**Why:** The class that has the data does the check: `User` knows its projects. The rules are
+testable without storage, and the API (Phase 2) gets them without repeating them. Ignoring
+case avoids two projects that look the same in the list.

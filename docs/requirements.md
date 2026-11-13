@@ -101,9 +101,10 @@ grouped by what I'm learning.
 - **AC-01.1** Given I have no project called "German", when I create a project "German", then
   it appears in my list of projects.
 - **AC-01.2** Given I already have a project "German", when I create another
-  project "German", then it's refused with a message that the name already exists.
-- **AC-01.3** Given I enter an empty name, when I create a project, then it's
-  refused with a message that a name is required.
+  project "German", then it's refused with a message that the name already exists. Names
+  are compared ignoring upper/lower case and spaces at the ends, so " german" is refused too.
+- **AC-01.3** Given I enter an empty name (or only spaces), when I create a project, then
+  it's refused with a message that a name is required.
 
 ### US-02 Import a deck
 As a learner, I want to import my cards from a CSV file into a project, so that I don't have

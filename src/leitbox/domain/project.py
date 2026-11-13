@@ -4,6 +4,9 @@ from leitbox.domain.deck import Deck
 
 class Project():
     def __init__(self, name: str, decks: list[Deck] | None = None, project_id: str | None = None):
+        name = name.strip()  
+        if not name:                          
+            raise ValueError("A project needs a name")
         self.name = name
         if decks is None:
             decks = []          
