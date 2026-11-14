@@ -69,3 +69,14 @@ The trimmed name is stored as typed.
 **Why:** The class that has the data does the check: `User` knows its projects. The rules are
 testable without storage, and the API (Phase 2) gets them without repeating them. Ignoring
 case avoids two projects that look the same in the list.
+
+## D-007 — The default user: fixed ID, created at startup
+**Decision:** The MVP has one learner with a fixed ID, `DEFAULT_USER_ID = "local"` in
+`config.py`. On every start, `__main__.py` loads that user from storage and, if it isn't
+there yet (first start), creates and saves it. Services receive the user's ID and assume the
+user exists.
+**Options:** a random ID created on the first start and remembered in the data file · the
+service creates the user when it's missing.
+**Why:** A fixed ID needs no extra storage, and restarts always find the same user. Services
+then work like they will after a login: they get the ID of a user who exists. With accounts,
+the login provides the ID and the startup step goes away; services don't change.

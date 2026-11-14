@@ -48,7 +48,7 @@ flowchart TD
 | **Storage** | `storage/` | Saving and loading projects, decks, cards and reviews. A repository *interface* says what can be done (`save`, `get`, `list`…); the JSON implementation does it with one file in `DATA_DIR` (D-005). It also converts the objects to and from JSON. A database implementation replaces it after the MVP. | `domain` |
 | **Importers** | `importers/` | Reading a CSV file into question/answer pairs, with its checks (file size, columns, empty fields). Knows nothing about decks or cards. | nothing from the other layers |
 | **CLI** | `cli/` | The conversation with the learner: menus, showing questions, asking "knew it?". Calls the services; reads files through the importers. | `services`, `importers` |
-| **Start** | `__main__.py` | Assembles the app (`python -m leitbox`): reads `config.py`, creates the JSON storage and the `Scheduler` with the configured intervals, and starts the CLI. | everything it needs to assemble |
+| **Start** | `__main__.py` | Assembles the app (`python -m leitbox`): reads `config.py`, creates the JSON storage, creates the default user on the first start (D-007), creates the `Scheduler` with the configured intervals, and starts the CLI. | everything it needs to assemble |
 
 **The dependency rule:** arrows point towards the domain, never away from it. So the
 domain can be tested without files, and the CLI can be joined by an API without changing the

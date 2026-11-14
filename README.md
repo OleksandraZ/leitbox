@@ -5,7 +5,7 @@ question/answer cards from a CSV file and study them deck by deck. Every card yo
 a box and comes back less often, and every card you forget goes back to box 1 and comes back
 the next day. The app only shows you the cards that are due.
 
-**Status:** planning done; the command-line app (MVP) is being built. See the
+**Status:** the command-line app (MVP) is being built: creating and listing projects works. See the
 [roadmap](docs/roadmap.md), the [requirements](docs/requirements.md) and the
 [design diagrams](docs/diagrams/README.md).
 
@@ -26,7 +26,7 @@ cp .env.example .env               # optional: change where data is stored
 ## Run
 
 ```bash
-python -m leitbox                  # available from Phase 1
+python -m leitbox                  # menu: create and list projects (more coming)
 ```
 
 ## Test
