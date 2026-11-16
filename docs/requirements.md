@@ -93,6 +93,21 @@ The number of boxes and the intervals live in one configuration place.
   projects. A copy is independent: changes to the original don't affect it, and progress is
   per copy.
 
+### Importing a deck (CSV)
+- **R19** A deck's name is required and unique within its project. Names are trimmed and
+  compared ignoring upper/lower case, like project names (D-006): importing " a1 verbs" into a
+  project that has "A1 verbs" is refused. To re-import, delete the deck first (US-06).
+- **R20** Import file format (D-008):
+  - UTF-8 text with a `.csv` extension; a UTF-8 "BOM" (added by Excel) is accepted.
+  - Comma-separated, with standard CSV quoting (`"to go, went"` is one field).
+  - The first row is a header that must contain the columns `question` and `answer`.
+    Other columns are ignored (room for e.g. `hint` later).
+  - Each following row is one card, in file order (import order, R8). Spaces at the ends of
+    a question or answer are removed; an empty question or answer is an error. Fully empty
+    lines are skipped.
+  - Row numbers in error messages count like a spreadsheet: the header is row 1.
+  - A file with no cards, more than 2,000 cards, or larger than 1 MB is refused (N5).
+
 ## 5. User stories — MVP (Must)
 
 ### US-01 Create a project
@@ -229,7 +244,6 @@ Leitner rules while cards exist (N3).
 
 ## 9. Open questions
 
-- **CSV format:** which columns (question, answer, anything else)?
 - **Cram mode:** does it record reviews for statistics?
 - **Shared link:** can a guest open a shared link, or only logged-in learners?
 - **Copied decks:** does a copy remember which deck it came from?

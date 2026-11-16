@@ -11,9 +11,12 @@ Requirements and user stories (US-xx): [requirements.md](requirements.md) · Des
 | Target date | Milestone | What can be shown |
 |---|---|---|
 | Oct 29 | Plan approved | Requirements, diagrams, folder structure, roadmap, README |
-| Nov 12 | Check-in 1 | Phase 1 done: the MVP works from the command line, with tests |
-| Nov 17 | Check-in 2 | Phase 2 in progress: the API works on the existing storage |
-| Nov 24 | Check-in 3 + submission | Phase 2 done; Phase 3–4 as far as they got |
+| Nov 17 | Check-in | Phase 1 in progress: projects work end to end, CSV importer done |
+| Nov 24 | Check-in + submission | Phase 1 done (tagged `phase-1`): the MVP works from the command line, with tests |
+| after Nov 24 | Finished app | Phase 2 (API + database), then Phase 4 (web UI); Phase 3 optional |
+
+Re-planned Nov 16: Phase 1 took longer than estimated, so the submission is the MVP
+(Phase 1). Phase 2 needs about 6–8 sessions and starts after the submission.
 
 ## Phase 0 — Requirements and design ✅
 
@@ -65,5 +68,5 @@ $5/month) is not planned.
 
 A simple web page for studying a deck, talking to the API only. Planned once Phase 2 works.
 
-Phases 3 and 4 may continue after the course submission: the goal is a finished app that
+Phases 2–4 continue after the course submission: the goal is a finished app that
 runs locally, with free hosting as an option.

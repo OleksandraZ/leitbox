@@ -80,3 +80,30 @@ service creates the user when it's missing.
 **Why:** A fixed ID needs no extra storage, and restarts always find the same user. Services
 then work like they will after a login: they get the ID of a user who exists. With accounts,
 the login provides the ID and the startup step goes away; services don't change.
+
+## D-008 — CSV import: format and importer
+**Decision:** Import files use the format in requirements R20: a required `question,answer`
+header, comma-separated, UTF-8 (BOM accepted), extra columns ignored. The importer
+(`importers/csv_importer.py`) only reads and checks the file and returns the rows as
+`(question, answer)` pairs; the service turns them into `Card`s (box 1, due on the import day,
+position = row order). Every problem (missing file, not a CSV, wrong header, empty field, too
+many cards, too large) raises one custom exception, `CsvImportError`, a subclass of
+`ValueError`, with a message that names the row. The importer stops at the first problem.
+The limits (1 MB, 2,000 cards) live in `config.py` and are passed in.
+**Options:** no header (column order only) · semicolon separator (German Excel default) ·
+the importer builds `Card`s itself · collect all row errors instead of stopping at the first.
+**Why:** A header makes files readable and lets extra columns be added later without breaking
+old files. Returning plain pairs keeps the importer independent of the domain, so another
+format (e.g. JSON, Anki export) is just another importer. Subclassing `ValueError` means the
+CLI's existing `except ValueError` shows import errors without a stack trace (N4). Stopping at
+the first error is simpler; the message still says where to fix the file.
+**Consequence:** Files saved by German Excel with `;` are refused with a header error; the
+learner must export as "CSV UTF-8 (comma-delimited)". Revisit if that's a real problem.
+
+## D-009 — Deck name rules live in the domain
+**Decision:** Same rules as project names (D-006), one level down: `Deck` trims its name and
+refuses an empty one; `Project.add_deck` refuses a name the project already has (ignoring
+case). Both raise `ValueError` (R19).
+**Options:** allow duplicate deck names · overwrite the old deck on re-import.
+**Why:** Two decks with the same name can't be told apart in the menu. Overwriting would
+silently throw away learning progress; re-import is delete + import (US-06).
