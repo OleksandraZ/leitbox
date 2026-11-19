@@ -17,3 +17,9 @@ class User():
                 raise ValueError(f"A project called '{project.name}' already exists")
         self.projects.append(project)
 
+    def find_project(self, name: str) -> Project: 
+        for project in self.projects:
+            if name.strip().casefold() == project.name.casefold():
+                return project
+        raise ValueError(f"A project called '{name}' doesn't exist")
+

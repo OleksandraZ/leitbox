@@ -12,6 +12,7 @@ classDiagram
         +name: str
         +projects: list~Project~
         +add_project(project: Project)
+        +find_project(name: str) Project
     }
     class Project {
         +id: str
@@ -77,7 +78,10 @@ classDiagram
 cards. Each deck belongs to exactly one project and each card to exactly one deck (R13). The
 filled diamond (composition) means the parts don't live on their own: deleting a project
 deletes its decks, and deleting a deck deletes its cards, after a warning (R17). `User.add_project` refuses a project name the user already has
-(ignoring case and spaces at the ends), and a project refuses an empty name (D-006).
+(ignoring case and spaces at the ends), and a project refuses an empty name (D-006). The same
+rules apply one level down: `Project.add_deck` refuses a deck name the project already has, and
+a deck refuses an empty name (D-009). `User.find_project` finds a project by name with the same
+comparison, or raises an error.
 In the MVP there is a single default user, but every project already has
 an owner, so accounts can be added after the MVP without changing the model.
 

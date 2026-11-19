@@ -16,5 +16,8 @@ class Project():
         self.id = project_id
 
     def add_deck(self, deck: Deck) -> None:
-        self.decks.append(deck)
+        for existing in self.decks:
+            if existing.name.casefold() == deck.name.casefold():
+                raise ValueError(f"A deck called '{deck.name}' already exists")
+        self.decks.append(deck)    
 

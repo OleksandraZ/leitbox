@@ -29,4 +29,24 @@ def test_add_project_and_check_it_is_saved():
 
     assert user.projects[0].name == 'P1'
 
+def test_existing_project_found():
+    user = User('user1')
+    project = Project('German')
+    user.add_project(project)
+    find_project = user.find_project(" german")
+    assert find_project is project
+    assert find_project.name == project.name
 
+def test_raise_on_finding_not_existing_project():
+    user = User('user1')
+    project = Project('German')
+    user.add_project(project)
+    
+    with pytest.raises(ValueError):
+        user.find_project("Spanish")
+
+def test_raise_on_no_projects():
+    user = User('user1')
+    
+    with pytest.raises(ValueError):
+        user.find_project("Spanish")

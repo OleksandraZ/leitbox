@@ -11,6 +11,9 @@ class Visibility(Enum):
 
 class Deck():
     def __init__(self, name: str, cards: list[Card] | None = None, visibility: Visibility = Visibility.PRIVATE, deck_id: str | None = None):
+        name = name.strip()  
+        if not name:                          
+            raise ValueError("A deck needs a name")
         self.name = name
         if cards is None:
             cards = []          

@@ -1,5 +1,7 @@
 from datetime import date, timedelta
 
+import pytest
+
 from leitbox.domain.card import Card, CardStatus
 from leitbox.domain.deck import Deck
 
@@ -80,3 +82,16 @@ def test_two_decks_do_not_share_a_list():
         
     assert len(deck1.cards) == 1
     assert len(deck2.cards) == 0
+
+def test_deck_with_spaces_only_name_is_refused():
+    with pytest.raises(ValueError):
+        Deck('   ')
+        
+def test_deck_empty_name_is_refused():
+    with pytest.raises(ValueError):
+        Deck('')
+
+def test_deck_trimmed_name():
+    deck = Deck(" A1 verbs ")
+    assert deck.name == "A1 verbs"
+

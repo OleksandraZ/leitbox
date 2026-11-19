@@ -25,7 +25,6 @@ def test_project_with_spaces_only_name_is_refused():
     with pytest.raises(ValueError):
         Project('   ')
         
-        
 def test_project_empty_name_is_refused():
     with pytest.raises(ValueError):
         Project('')
@@ -33,3 +32,12 @@ def test_project_empty_name_is_refused():
 def test_project_trimmed_name():
     project = Project(' P ')
     assert project.name == 'P'
+
+def test_duplicate_deck_name_is_refused():
+    project = Project('German')
+    deck1 = Deck("A1 verbs")
+    project.add_deck(deck1)
+
+    deck2 = Deck(" a1 verbs")
+    with pytest.raises(ValueError):
+        project.add_deck(deck2)
