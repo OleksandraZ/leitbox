@@ -95,3 +95,26 @@ def test_deck_trimmed_name():
     deck = Deck(" A1 verbs ")
     assert deck.name == "A1 verbs"
 
+def test_cards_count_due_today():
+    card1 = Card("question1", "answer1", YESTERDAY, 1)
+    card2 = Card("question2", "answer2", TODAY, 1)
+    card3 = Card("question3", "answer3", TOMORROW, 1)
+    card4 = Card("question4", "answer4", YESTERDAY, position=1, box=5, status=CardStatus.RETIRED)
+    deck = Deck('my_deck')
+            
+    deck.add_card(card1)
+    deck.add_card(card2)
+    deck.add_card(card3)
+    deck.add_card(card4)
+
+    due_today = deck.due_count(TODAY)
+
+    assert due_today == 2
+
+def test_empty_deck_gives_zero_due_count():
+    deck = Deck('my_deck')
+    due_today = deck.due_count(TODAY)
+    
+    assert due_today == 0
+
+

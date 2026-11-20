@@ -22,12 +22,13 @@ def run(projects: ProjectService, decks: DeckService) -> None:
                 print(f"Project {project.name} was created.")
         elif choice == "2":
             all_projects = projects.list_projects()
+            today = date.today()
             if not all_projects:
                 print("No projects yet.")
             for project in all_projects:
                 print(f"- {project.name}")
                 for deck in project.decks:
-                    print(f"  {deck.name} ({len(deck.cards)} cards)") 
+                    print(f"  {deck.name}: {deck.due_count(today)} due ({len(deck.cards)} cards)") 
         elif choice == "3":
             project_name = input("Project name: ")
             deck_name = input("Deck name: ")

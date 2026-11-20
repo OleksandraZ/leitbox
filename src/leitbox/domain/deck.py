@@ -29,4 +29,7 @@ class Deck():
     def due_cards(self, today: date) -> list[Card]:
         due = [card for card in self.cards if card.is_due(today)]
         return sorted(due, key=lambda c: (c.due, c.box, c.position))
+
+    def due_count(self, today: date) -> int:
+        return len(self.due_cards(today))
         
