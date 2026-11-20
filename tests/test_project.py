@@ -41,3 +41,24 @@ def test_duplicate_deck_name_is_refused():
     deck2 = Deck(" a1 verbs")
     with pytest.raises(ValueError):
         project.add_deck(deck2)
+
+def test_find_deck_by_name():
+    project = Project('project')
+    deck = Deck('A1 verbs')
+    project.add_deck(deck)
+
+    found_deck = project.find_deck('  a1 verbs')
+
+    assert found_deck.name == 'A1 verbs'
+
+def test_unknown_deck_is_not_found():
+    project = Project('project')
+    deck = Deck('A1 verbs')
+    project.add_deck(deck)
+
+    with pytest.raises(ValueError, match = "doesn't exist"):
+        project.find_deck('  a2 verbs')
+
+
+
+

@@ -1,18 +1,14 @@
-# A user round trip: user → project → deck → that card. 
-# Then check the IDs and names at each level, 
-# e.g. loaded.projects[0].decks[0].cards[0].id.
-# A quick mutation check: change "id" to "deck_id" in deck_to_dict, 
-# see the test go red, then change it back.
-
-from datetime import date
+from datetime import date, datetime
 
 from leitbox.domain.card import Card, CardStatus
 from leitbox.domain.deck import Deck
 from leitbox.domain.project import Project
+from leitbox.domain.review import Review
 from leitbox.domain.user import User
-from leitbox.storage.converters import card_to_dict, card_from_dict, user_from_dict, user_to_dict
+from leitbox.storage.converters import card_to_dict, card_from_dict, review_from_dict, review_to_dict, user_from_dict, user_to_dict
 
 DUE = date(2026, 11, 10)
+REVIEWED_AT = datetime(2026, 11, 10)
 
 
 def test_card_round_trip():
@@ -42,3 +38,21 @@ def test_user_round_trip():
     assert user.projects[0].id == user_loaded.projects[0].id
     assert user.projects[0].decks[0].id == user_loaded.projects[0].decks[0].id
     assert user.projects[0].decks[0].cards[0].id == user_loaded.projects[0].decks[0].cards[0].id
+
+def test_review_round_trip():
+    review = Review(card_id="c1", user_id="local", reviewed_at=REVIEWED_AT,
+                    knew_it=True, box_before=2, box_after=3, review_id="r1")
+    loaded = review_from_dict(review_to_dict(review))
+
+    assert loaded.card_id == review.card_id
+    assert loaded.user_id == review.user_id
+    assert loaded.reviewed_at == review.reviewed_at
+    assert loaded.knew_it == review.knew_it
+    assert loaded.box_before == review.box_before
+    assert loaded.box_after == review.box_after
+    assert loaded.id == "r1"
+
+
+
+
+

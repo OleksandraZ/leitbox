@@ -107,3 +107,22 @@ case). Both raise `ValueError` (R19).
 **Options:** allow duplicate deck names · overwrite the old deck on re-import.
 **Why:** Two decks with the same name can't be told apart in the menu. Overwriting would
 silently throw away learning progress; re-import is delete + import (US-06).
+
+## D-010 — Answering a card: by ID, reviews in their own repository, safe writes
+**Decision:** `StudyService.answer(card_id, knew_it, now)` loads the user, finds the card by
+its ID (`User.find_card`), lets the `Scheduler` change it, then stores the review and the
+user. Reviews have their own interface, `ReviewRepository` (`add`, `list_for_user`); its JSON
+version uses the `"reviews"` list of the same file. Both JSON repositories read and write
+through shared helpers that write to a temporary file and then replace the real file. The
+review is saved **before** the user. The CLI passes `now = datetime.now().astimezone()`, so
+`now.date()` is the learner's local date.
+**Options:** pass the card object · store reviews inside the user tree · write the file
+directly · save the user first · UTC time from the CLI.
+**Why:** Cards held by the CLI are copies, so only an ID is reliable; an API will also
+answer by ID. Reviews must outlive their cards (R18), so they are not part of the tree.
+Replacing the file in one step means a crash leaves the old or the new file, never broken
+JSON (D-005, N1). If the app stops between the two saves, saving the review first means a
+review is never lost (N1); the worst case is one extra review of a card that's still due.
+A UTC date can be a day off from the local calendar around midnight (N2).
+**Consequence:** Two writes per answer; fine at this size. A database (Phase 2) can do both
+in one transaction.

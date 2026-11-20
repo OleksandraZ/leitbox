@@ -1,4 +1,5 @@
 import uuid
+from leitbox.domain.card import Card
 from leitbox.domain.project import Project
 
 class User():
@@ -22,4 +23,12 @@ class User():
             if name.strip().casefold() == project.name.casefold():
                 return project
         raise ValueError(f"A project called '{name}' doesn't exist")
+
+    def find_card(self, card_id: str) -> Card:
+        for project in self.projects:   
+            for deck in project.decks:
+                for card in deck.cards:
+                    if card.id == card_id:
+                        return card
+        raise ValueError(f"No card with ID {card_id}")
 

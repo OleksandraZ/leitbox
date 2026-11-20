@@ -1,8 +1,9 @@
-from datetime import date
+from datetime import date, datetime
 
 from leitbox.domain.card import Card, CardStatus
 from leitbox.domain.deck import Deck, Visibility
 from leitbox.domain.project import Project
+from leitbox.domain.review import Review
 from leitbox.domain.user import User
 
 def card_to_dict(card: Card) -> dict:
@@ -70,5 +71,28 @@ def user_from_dict(data: dict) -> User:
         projects=[project_from_dict(p) for p in data["projects"]],
         user_id=data["id"]
     )
+
+def review_to_dict(review: Review) -> dict:
+    return {
+        "card_id": review.card_id,
+        "user_id": review.user_id,
+        "reviewed_at": review.reviewed_at.isoformat(),
+        "knew_it": review.knew_it,
+        "box_before": review.box_before,
+        "box_after": review.box_after,
+        "id": review.id
+    }
+
+def review_from_dict(data: dict) -> Review:
+    return Review(
+        card_id = data["card_id"],
+        user_id = data["user_id"],
+        reviewed_at = datetime.fromisoformat(data["reviewed_at"]),
+        knew_it = data["knew_it"],
+        box_before = data["box_before"],
+        box_after = data["box_after"],
+        review_id = data["id"]
+    )
+
 
  

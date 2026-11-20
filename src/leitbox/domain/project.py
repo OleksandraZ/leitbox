@@ -21,3 +21,10 @@ class Project():
                 raise ValueError(f"A deck called '{deck.name}' already exists")
         self.decks.append(deck)    
 
+    def find_deck(self, name: str) -> Deck:
+        for deck in self.decks:
+            if name.strip().casefold() == deck.name.casefold():
+                return deck
+        raise ValueError(f"A deck called '{name}' doesn't exist")
+        
+
