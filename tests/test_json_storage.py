@@ -1,13 +1,16 @@
-from datetime import date
+from datetime import date, datetime
 import json
 
 from leitbox.domain.card import Card, CardStatus
 from leitbox.domain.deck import Deck
 from leitbox.domain.project import Project
+from leitbox.domain.review import Review
 from leitbox.domain.user import User
-from leitbox.storage.json_storage import JsonUserRepository
+from leitbox.storage.json_storage import JsonReviewRepository, JsonUserRepository
 
 DUE = date(2026, 11, 10)
+REVIEWED_AT = datetime(2026, 11, 10)
+
 
 
 def test_saved_user_can_be_loaded_again(tmp_path):
@@ -62,3 +65,47 @@ def test_saving_twice_leaves_one_user(tmp_path):
     assert len(loaded.projects) == 1
     assert len(data["users"]) == 1
 
+def test_reviews_are_listed_per_user_in_order(tmp_path):
+    path = tmp_path / "leitbox.json"
+    review_1 = Review(card_id="c1", user_id="local", reviewed_at=REVIEWED_AT,
+                    knew_it=True, box_before=2, box_after=3, review_id="r1")
+
+    review_2 = Review(card_id="c2", user_id="other", reviewed_at=REVIEWED_AT,
+                        knew_it=True, box_before=2, box_after=3, review_id="r2")
+
+    review_3 = Review(card_id="c3", user_id="local", reviewed_at=REVIEWED_AT,
+                            knew_it=True, box_before=2, box_after=3, review_id="r3")
+    
+    JsonReviewRepository(path).add(review_1)
+    JsonReviewRepository(path).add(review_2)
+    JsonReviewRepository(path).add(review_3)
+
+    loaded_local = JsonReviewRepository(path).list_for_user("local")
+    
+    assert [r.id for r in loaded_local] == ["r1", "r3"]
+
+
+def test_missing_file_returns_empty_list(tmp_path):
+    path = tmp_path / "leitbox.json"
+
+    loaded_local = JsonReviewRepository(path).list_for_user("local")
+    
+    assert loaded_local == []
+
+def test_users_and_reviews_dont_overwrite_each_other(tmp_path):
+    path = tmp_path / "leitbox.json"
+    users = JsonUserRepository(path)
+    reviews = JsonReviewRepository(path)
+
+    users.save(User(name='U1', user_id='local'))
+
+    review_1 = Review(card_id="c1", user_id="local", reviewed_at=REVIEWED_AT,
+                        knew_it=True, box_before=2, box_after=3, review_id="r1")
+    
+    reviews.add(review_1)
+
+    users.save(User(name='U1', user_id='local'))
+
+    assert len(JsonReviewRepository(path).list_for_user('local')) == 1
+    assert JsonUserRepository(path).get('local') is not None
+    
