@@ -8,6 +8,7 @@ from leitbox.domain.deck import Deck
 TODAY = date(2026, 11, 6)
 YESTERDAY = TODAY - timedelta(days=1)
 TOMORROW = TODAY + timedelta(days=1)
+IN_3_DAYS = TODAY + timedelta(days=3)
 
 def test_add_card_to_deck_and_check_len():
     card = Card("question", "answer", TODAY, 1)
@@ -117,4 +118,23 @@ def test_empty_deck_gives_zero_due_count():
     
     assert due_today == 0
 
+def test_next_due_for_retired_is_none():
+    deck = Deck('my_deck')
+
+    card1 = Card("question1", "answer1", YESTERDAY, position=1, box=1, status=CardStatus.RETIRED)
+    card2 = Card("question2", "answer2", YESTERDAY, position=2, box=1, status=CardStatus.RETIRED)
+    deck.add_card(card1)
+    deck.add_card(card2)
+    
+    assert deck.next_due() is None
+
+def test_next_due_date():
+    deck = Deck('my_deck')
+
+    card1 = Card("question1", "answer1", IN_3_DAYS, position=1, box=1)
+    card2 = Card("question2", "answer2", TOMORROW, position=2, box=1)
+    deck.add_card(card1)
+    deck.add_card(card2)
+    
+    assert deck.next_due() == TOMORROW
 

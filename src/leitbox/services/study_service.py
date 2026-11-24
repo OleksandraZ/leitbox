@@ -29,3 +29,9 @@ class StudyService:
         self.reviews.add(review)      
         self.users.save(user)         
         return review
+
+    def next_due(self, project_name: str, deck_name: str) -> date | None:
+        user = self.users.get(self.user_id)
+        if user is None:
+            raise LookupError(f"No user with ID {self.user_id}")
+        return user.find_project(project_name).find_deck(deck_name).next_due()

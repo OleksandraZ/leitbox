@@ -2,7 +2,7 @@ from datetime import date
 from enum import Enum
 import uuid
 
-from leitbox.domain.card import Card
+from leitbox.domain.card import Card, CardStatus
 
 class Visibility(Enum):
     PRIVATE = "private"
@@ -32,4 +32,8 @@ class Deck():
 
     def due_count(self, today: date) -> int:
         return len(self.due_cards(today))
+
+    def next_due(self) -> date | None:
+        dates = [card.due for card in self.cards if card.status == CardStatus.ACTIVE]
+        return min(dates) if dates else None    
         

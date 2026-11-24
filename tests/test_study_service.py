@@ -63,3 +63,7 @@ def test_unknown_id_raises_error(tmp_path):
         service.answer("no-such-id", True, NOW)
 
     assert service.reviews.list_for_user("local") == []
+
+def test_next_due(tmp_path):
+    service = study_service(tmp_path)
+    assert service.next_due("German", "A1 verbs") == TODAY

@@ -35,3 +35,17 @@ def test_is_due_for_retired_card_on_due_date():
     card = Card("question", "answer", DUE, 1, status=CardStatus.RETIRED)
     assert card.is_due(DUE) is False
 
+def test_is_not_overdue_if_due_today():
+    card = Card("question", "answer", DUE, 1)
+    assert card.is_overdue(DUE) is False
+
+def test_is_overdue_if_due_yesterday():
+    card = Card("question", "answer", DUE, 1)
+    assert card.is_overdue(DUE + timedelta(days=1)) is True
+
+def test_is_not_overdue_if_due_yesterday_and_retired():
+    card = Card("question", "answer", DUE, 1, status=CardStatus.RETIRED)
+    assert card.is_overdue(DUE + timedelta(days=1)) is False
+
+
+
