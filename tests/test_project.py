@@ -59,6 +59,23 @@ def test_unknown_deck_is_not_found():
     with pytest.raises(ValueError, match = "doesn't exist"):
         project.find_deck('  a2 verbs')
 
+def test_remove_deck_successfully():
+    project = Project('project')
+    deck_1 = Deck('A1 verbs')
+    deck_2 = Deck('A2 verbs')
+
+    project.add_deck(deck_1)
+    project.add_deck(deck_2)
+
+    project.remove_deck(' a1 verbs')
+    assert len(project.decks) == 1
+    assert project.decks[0].name == "A2 verbs"
+
+def test_removing_unknown_deck():
+    project = Project('project')
+
+    with pytest.raises(ValueError):
+        project.remove_deck('A1 verbs')
 
 
 

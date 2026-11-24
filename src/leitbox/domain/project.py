@@ -26,5 +26,10 @@ class Project():
             if name.strip().casefold() == deck.name.casefold():
                 return deck
         raise ValueError(f"A deck called '{name}' doesn't exist")
-        
+
+    def remove_deck(self, name: str) -> Deck:
+        deck = self.find_deck(name)    
+        self.decks.remove(deck)
+        return deck                     
+
 
