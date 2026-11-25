@@ -10,7 +10,7 @@ from leitbox.services.study_service import StudyService
 
 def run(projects: ProjectService, decks: DeckService, study: StudyService) -> None:
     while True:
-        print("Please choose:\n0) Quit  1) Create a project  2) List projects  3) Import a deck  4) Study a deck" )
+        print("Please choose:\n0) Quit  1) Create a project  2) List projects  3) Import a deck  4) Study a deck  5) Delete a deck" )
         choice = input("> ").strip()
         if choice == "1":   
             create_project(projects)
@@ -20,10 +20,12 @@ def run(projects: ProjectService, decks: DeckService, study: StudyService) -> No
             import_deck(decks)
         elif choice == "4": 
             study_deck(study)
+        elif choice == "5": 
+            delete_deck(decks)
         elif choice == "0": 
             break
         else:               
-            print("Please choose 1, 2, 3, 4 or 0.")
+            print("Please choose 1, 2, 3, 4, 5 or 0.")
 
 
 def ask_reply() -> str:
@@ -73,7 +75,6 @@ def study_deck(study: StudyService) -> None:
         print(f"Not possible: {error}")
         return
                                      
-    
     if not cards:                                  
         next_date = study.next_due(project_name, deck_name)
         if next_date is None: 
@@ -99,3 +100,16 @@ def study_deck(study: StudyService) -> None:
             didnt += 1
     print(f"Done: {knew} known, {didnt} not known.")
     
+def delete_deck(decks: DeckService) -> None:
+    project_name = input("Project name: ")
+    deck_name = input("Deck name: ")
+    confirm = input(f"Delete deck '{deck_name.strip()}' and all its cards? Review history is kept. (y/n): ").strip().lower()
+    if confirm != "y":
+        print("Nothing deleted.")                      # AC-06.2
+        return
+    try:
+        deck = decks.delete_deck(project_name, deck_name)
+    except ValueError as error:
+        print(f"Not possible: {error}")
+        return
+    print(f"Deleted deck {deck.name} ({len(deck.cards)} cards).")

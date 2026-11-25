@@ -22,4 +22,12 @@ class DeckService:
         self.users.save(user)
         return deck
 
+    def delete_deck(self, project_name: str, deck_name: str) -> Deck:
+        user = self.users.get(self.user_id)
+        if user is None:
+            raise LookupError(f"No user with ID {self.user_id}")
+        deck = user.find_project(project_name).remove_deck(deck_name)
+        self.users.save(user)
+        return deck
+
 
