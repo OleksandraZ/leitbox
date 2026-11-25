@@ -10,7 +10,7 @@ flowchart TD
     D --> Q{Any due cards left?}
 
     Q -- no --> M[Show: nothing due, and when the next card is due]
-    M --> End([Back to the deck list])
+    M --> End([Back to the menu])
 
     Q -- yes --> S[Show the next due card's question]
     S --> R[Reveal the answer]
@@ -40,7 +40,7 @@ flowchart TD
 
 **Before the first card.** The learner chooses a project and one of its decks: a session
 always covers one deck. If nothing in the deck is due, the learner sees a message with the
-date of the next due card and goes back to the deck list.
+date of the next due card and goes back to the menu.
 
 **For each card** (the loop):
 1. The system shows the **question** of the next due card. The order is fixed: oldest due
@@ -54,7 +54,7 @@ date of the next due card and goes back to the deck list.
 5. The learner continues or stops.
 
 **Ending.** The session ends when no due cards are left or when the learner stops; either
-way the learner is back at the deck list. Cards not reviewed stay due (R11). A learner can
+way the learner is back at the menu. Cards not reviewed stay due (R11). A learner can
 also quit while a question is shown: that card wasn't answered, so it stays due as well.
 
 **Each card at most once per session.** A card answered "didn't know" is due tomorrow, so it

@@ -1,7 +1,7 @@
 # 5. Architecture
 
-How the code is split into layers, and which layer may use which. Arrows mean "imports /
-calls". Grey dashed parts come after the MVP.
+The layers and which layer may use which. Arrows mean "imports / calls". Grey dashed parts come
+after the MVP.
 
 ```mermaid
 flowchart TD
@@ -11,10 +11,10 @@ flowchart TD
     API["api: REST endpoints"]
     UI["web UI"]
     IMP["importers: CSV file to question/answer pairs"]
-    SRV["services: use cases"]
+    SRV["services: ProjectService, DeckService, StudyService"]
     DOM["domain: Card, Deck, Project, User, Review, Scheduler"]
-    REP["storage: repository interfaces"]
-    JSON["storage: JSON files"]
+    REP["storage: UserRepository, ReviewRepository"]
+    JSON["storage: JSON file"]
     DB["storage: database"]
 
     Main --> CFG
@@ -43,40 +43,36 @@ flowchart TD
 
 | Layer | Package | Job | May import |
 |---|---|---|---|
-| **Domain** (core) | `domain/` | The entities and the Leitner rules ([domain model](04-class-diagram.md)). Pure Python: no files, no `print`/`input`, no database, no web. | nothing from the other layers |
-| **Services** | `services/` | The use cases: create a project, import a deck from question/answer pairs, list due cards, answer a card (apply the rules, record the review, save), delete a deck. They coordinate domain and storage, without any input/output of their own. | `domain`, `storage` (interfaces only) |
-| **Storage** | `storage/` | Saving and loading projects, decks, cards and reviews. A repository *interface* says what can be done (`save`, `get`, `list`…); the JSON implementation does it with one file in `DATA_DIR` (D-005). It also converts the objects to and from JSON. A database implementation replaces it after the MVP. | `domain` |
-| **Importers** | `importers/` | Reading a CSV file into question/answer pairs, with its checks (file size, columns, empty fields). Knows nothing about decks or cards. | nothing from the other layers |
-| **CLI** | `cli/` | The conversation with the learner: menus, showing questions, asking "knew it?". Calls the services; reads files through the importers. | `services`, `importers` |
-| **Start** | `__main__.py` | Assembles the app (`python -m leitbox`): reads `config.py`, creates the JSON storage, creates the default user on the first start (D-007), creates the `Scheduler` with the configured intervals, and starts the CLI. | everything it needs to assemble |
+| **Domain** | `domain/` | Entities and Leitner rules ([domain model](04-class-diagram.md)). No files, no `print`/`input`, no database. | nothing |
+| **Services** | `services/` | Use cases. `ProjectService`: create and list projects. `DeckService`: import and delete decks. `StudyService`: due cards, next due date, answer a card (rules → save review → save user, D-010). | `domain`, `storage` interfaces |
+| **Storage** | `storage/` | Interfaces `UserRepository` (`get`, `save`) and `ReviewRepository` (`add`, `list_for_user`). The JSON versions share one file in `DATA_DIR` and write it safely (temp file + replace, D-005, D-010). Converters to and from JSON. | `domain` |
+| **Importers** | `importers/` | CSV file → question/answer pairs, with checks (D-008). | nothing |
+| **CLI** | `cli/` | Menu, one function per option. Calls the services and the importer. | `services`, `importers` |
+| **Start** | `__main__.py` | Creates the repositories, the default user (D-007), the `Scheduler` and the services, then runs the CLI. Turns Ctrl+C/Ctrl+D and a damaged data file into short messages (N4). | everything |
 
-**The dependency rule:** arrows point towards the domain, never away from it. So the
-domain can be tested without files, and the CLI can be joined by an API without changing the
-domain or the services.
+**Dependency rule:** arrows point towards the domain, never away from it. The domain is tested
+without files, and an API can be added next to the CLI without changing domain or services.
 
-**Configuration** (`config.py`) is read only at the start. Its values are passed in, e.g.
-the intervals into the `Scheduler`, so no other layer depends on where they come from.
+**Configuration** (`config.py`) is read only at the start; its values are passed in (e.g. the
+intervals into the `Scheduler`).
 
-## How the later phases fit in
+## Later phases
 
-- **Phase 2 (API):** a new `api/` package calls the *same* services. The database storage is
-  a second implementation of the same repository interfaces; the start code decides which one
-  is used.
-- **Phase 4 (web UI):** the web UI talks to the API only, never to the services or the
-  domain directly.
-- Nothing in `domain/` or `services/` has to be rewritten for either.
+- **Phase 2 (API):** `api/` calls the same services. A database is a second implementation of
+  the same repository interfaces; `__main__` (or the API start) chooses which.
+- **Phase 4 (web UI):** talks to the API only.
+- `domain/` and `services/` stay as they are.
 
-## Folder structure (MVP)
+## Folder structure
 
 ```text
 src/leitbox/
-├── __init__.py
 ├── __main__.py     # start: assembles the app, runs the CLI
 ├── config.py       # settings from the environment + Leitner intervals
 ├── domain/         # Card, Deck, Project, User, Review, Scheduler
-├── services/       # use cases
-├── storage/        # repository interfaces + JSON implementation
+├── services/       # ProjectService, DeckService, StudyService
+├── storage/        # repository interfaces, JSON implementation, converters
 ├── importers/      # CSV → question/answer pairs
-└── cli/            # menus, input/output
+└── cli/            # menu
 ```
-`api/` is added in Phase 2. Tests live in `tests/`, outside the package.
+Tests are in `tests/`, outside the package.

@@ -208,8 +208,7 @@ Not part of the MVP; designed for now, built after the MVP (see §7).
 
 ## 7. Scope (MoSCoW)
 
-Two levels: the **MVP**, submitted for the course (deadline 2026-11-24), and the finished app,
-which is completed after the MVP if needed.
+Two levels: the **MVP** (Phase 1) and the finished app (Phases 2–4).
 
 | Feature | Stories | MVP | Finished app |
 |---|---|---|---|

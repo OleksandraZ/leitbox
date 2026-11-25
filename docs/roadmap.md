@@ -11,7 +11,7 @@ Requirements and user stories (US-xx): [requirements.md](requirements.md) · Des
 | Target date | Phase | Done when |
 |---|---|---|
 | Oct 26 ✅ | Phase 0 — Requirements and design | Requirements, diagrams, folder structure, roadmap, README |
-| Nov 24 | Phase 1 — Core + command-line app (MVP) | All MVP stories work from the command line, with tests; tagged `phase-1` |
+| Nov 25 ✅ | Phase 1 — Core + command-line app (MVP) | All MVP stories work from the command line, with tests; tagged `phase-1` |
 | after Phase 1 | Phase 2 — REST API + database | Planned in detail once Phase 1 is done (about 6–8 sessions) |
 | later | Phase 4 — Web UI · Phase 3 — Deploy (optional) | Planned once Phase 2 works |
 
@@ -21,13 +21,11 @@ Problem, actors, Leitner rules, user stories with acceptance criteria, non-funct
 requirements, scope (MVP vs. after MVP). Diagrams: use cases, card states, review flow,
 class diagram, architecture. Package structure for the layers.
 
-## Phase 1 — Core + command-line app (MVP)
+## Phase 1 — Core + command-line app (MVP) ✅
 
-**Approach:** the domain (the Leitner rules) is built first, because it's pure Python and
-can be fully tested on its own. After that, the app grows in **vertical slices**: each slice
-is one use case that works end to end (command line → service → domain → JSON storage), so
-the app can be run and shown after every slice, and a late slice can be cut without leaving
-half-built layers behind.
+**Approach:** domain first (pure Python, fully testable on its own), then **vertical
+slices**: one use case per slice, end to end (command line → service → domain → JSON storage).
+The app runs after every slice, and a late slice can be cut without half-built layers.
 
 | # | Slice | Stories | Done when |
 |---|---|---|---|
@@ -36,7 +34,6 @@ half-built layers behind.
 | 2 | **Import a deck:** CSV format decided, CSV importer with its checks, a committed sample CSV, deck and cards saved. | US-02 | The sample CSV imports into a project; a broken file imports nothing and says which row is wrong. |
 | 3 | **See what's due:** projects and decks with the number of cards due today. | US-03 | The counts match the cards' due dates. |
 | 4 | **Study a deck:** due cards in order, question then answer, "knew it" / "didn't know", boxes and due dates updated, every review recorded and saved immediately. | US-04, US-05 | A full session works from the command line and survives quitting halfway. |
-| — | **MVP scope review:** with the basics working, decide whether small extras (e.g. rename a project) still fit. | — | Decision recorded. |
 | 5 | **Delete a deck:** with confirmation; reviews are kept. | US-06 | The deck and its cards are gone, the reviews are still stored. |
 | 6 | **Finish:** error-handling pass (no stack traces for the learner), README complete. | — | All MVP acceptance criteria pass; tagged `phase-1`. |
 
