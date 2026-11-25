@@ -1,6 +1,8 @@
 from datetime import date, datetime
 import json
 
+import pytest
+
 from leitbox.domain.card import Card, CardStatus
 from leitbox.domain.deck import Deck
 from leitbox.domain.project import Project
@@ -108,4 +110,10 @@ def test_users_and_reviews_dont_overwrite_each_other(tmp_path):
 
     assert len(JsonReviewRepository(path).list_for_user('local')) == 1
     assert JsonUserRepository(path).get('local') is not None
+
+def test_broken_data_file(tmp_path):
+    path = tmp_path / "leitbox.json"
+    path.write_text('{"users": [', encoding="utf-8")
     
+    with pytest.raises(ValueError, match="damaged"):
+        JsonUserRepository(path).get("local")

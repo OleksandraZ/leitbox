@@ -10,7 +10,11 @@ from leitbox.storage.repository import ReviewRepository, UserRepository
 def _read(path: Path) -> dict:
     if not path.exists():
         return {"users": [], "reviews": []}    
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        raise ValueError(f"The data file {path} is damaged (not valid JSON). Fix or remove it.") from None
+
 
 def _write(path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
