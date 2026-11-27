@@ -93,6 +93,3 @@ def review_from_dict(data: dict) -> Review:
         box_after = data["box_after"],
         review_id = data["id"]
     )
-
-
- 

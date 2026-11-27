@@ -23,40 +23,40 @@ können,"can, to be able to",modal
     assert result == [("sein", "to be"), ("gehen", "to go, to walk"), ("können", "can, to be able to")]
 
 def test_file_with_bom_works(tmp_path):
-    path = tmp_path / "cards.csv" 
+    path = tmp_path / "cards.csv"
     path.write_text("question,answer\nsein,to be\n", encoding="utf-8-sig")
 
     assert read_cards(path, 1_000_000, 2000) == [("sein", "to be")]
 
 def test_missing_file_is_refused(tmp_path):
-    path = tmp_path / "missing.csv"          
+    path = tmp_path / "missing.csv"
 
     with pytest.raises(CsvImportError, match="not found"):
         read_cards(path, 1_000_000, 2000)
 
 def test_not_csv_file_is_refused(tmp_path):
-    path = tmp_path / "cards.txt"          
+    path = tmp_path / "cards.txt"
     path.write_text("question,answer\nsein,to be\n")
 
     with pytest.raises(CsvImportError, match="not a .csv"):
         read_cards(path, 1_000_000, 2000)
 
 def test_file_bigger_than_max_bytes_is_refused(tmp_path):
-    path = write_csv(tmp_path, "question,answer\nsein,to be\n")         
+    path = write_csv(tmp_path, "question,answer\nsein,to be\n")
 
     with pytest.raises(CsvImportError, match="bigger"):
         read_cards(path, 10, 2000)
 
 def test_file_not_UTF_8_is_refused(tmp_path):
-    path = tmp_path / "cards.csv"  
+    path = tmp_path / "cards.csv"
 
-    path.write_bytes(b"\xff\xfe\xfa")        
+    path.write_bytes(b"\xff\xfe\xfa")
 
     with pytest.raises(CsvImportError, match="UTF-8"):
         read_cards(path, 1_000_000, 2000)
 
 def test_empty_file_is_refused(tmp_path):
-    path = write_csv(tmp_path, "")        
+    path = write_csv(tmp_path, "")
 
     with pytest.raises(CsvImportError, match="header"):
         read_cards(path, 1_000_000, 2000)
@@ -97,4 +97,3 @@ können,"can, to be able to",modal
 
 def test_csv_import_error_is_a_value_error():
     assert issubclass(CsvImportError, ValueError)
-

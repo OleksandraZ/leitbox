@@ -23,4 +23,4 @@ class Card:
         return self.status == CardStatus.ACTIVE and today >= self.due
 
     def is_overdue(self, today: date) -> bool:
-        return self.status == CardStatus.ACTIVE and today > self.due   
+        return self.status == CardStatus.ACTIVE and today > self.due

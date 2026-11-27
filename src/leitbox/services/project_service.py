@@ -8,12 +8,12 @@ class ProjectService:
         self.user_id = user_id
 
     def create_project(self, name: str) -> Project:
-        user = self.users.get(self.user_id)       
+        user = self.users.get(self.user_id)
         if user is None:
             raise LookupError(f"No user with ID {self.user_id}")
         project = Project(name)
-        user.add_project(project)                           
-        self.users.save(user)                      
+        user.add_project(project)
+        self.users.save(user)
         return project
 
     def list_projects(self) -> list[Project]:

@@ -29,5 +29,3 @@ class DeckService:
         deck = user.find_project(project_name).remove_deck(deck_name)
         self.users.save(user)
         return deck
-
-

@@ -9,14 +9,14 @@ class Visibility(Enum):
     SHARED = "shared"
     DEMO = "demo"
 
-class Deck():
+class Deck:
     def __init__(self, name: str, cards: list[Card] | None = None, visibility: Visibility = Visibility.PRIVATE, deck_id: str | None = None):
-        name = name.strip()  
-        if not name:                          
+        name = name.strip()
+        if not name:
             raise ValueError("A deck needs a name")
         self.name = name
         if cards is None:
-            cards = []          
+            cards = []
         self.cards = cards
         self.visibility = visibility
         if deck_id is None:
@@ -35,5 +35,4 @@ class Deck():
 
     def next_due(self) -> date | None:
         dates = [card.due for card in self.cards if card.status == CardStatus.ACTIVE]
-        return min(dates) if dates else None    
-        
+        return min(dates) if dates else None

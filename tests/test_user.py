@@ -46,13 +46,13 @@ def test_raise_on_finding_not_existing_project():
     user = User('user1')
     project = Project('German')
     user.add_project(project)
-    
+
     with pytest.raises(ValueError):
         user.find_project("Spanish")
 
 def test_raise_on_no_projects():
     user = User('user1')
-    
+
     with pytest.raises(ValueError):
         user.find_project("Spanish")
 
@@ -78,4 +78,4 @@ def test_non_existing_card_is_not_found():
     ])
 
     with pytest.raises(ValueError):
-        user.find_card("card_a1_french") 
+        user.find_card("card_a1_french")

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from leitbox.domain.review import Review
 from leitbox.domain.user import User
 
-class UserRepository(ABC):                        
+class UserRepository(ABC):
     @abstractmethod
     def get(self, user_id: str) -> User | None:
         """Return the user, or None if there's none with this ID."""
@@ -14,11 +14,11 @@ class UserRepository(ABC):
 
 
 class ReviewRepository(ABC):
-    @abstractmethod 
+    @abstractmethod
     def add(self, review: Review) -> None:
         """Store a new review. Reviews are never changed."""
-   
-    
-    @abstractmethod 
+
+
+    @abstractmethod
     def list_for_user(self, user_id: str) -> list[Review]:
         """All reviews of this user, oldest first."""

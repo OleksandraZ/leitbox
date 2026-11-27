@@ -12,7 +12,7 @@ class StudyService:
         self.reviews = reviews
         self.scheduler = scheduler
         self.user_id = user_id
-    
+
 
     def due_cards(self, project_name: str, deck_name: str, today: date) -> list[Card]:
         user = self.users.get(self.user_id)
@@ -26,8 +26,8 @@ class StudyService:
             raise LookupError(f"No user with ID {self.user_id}")
         card = user.find_card(card_id)
         review = self.scheduler.answer(card, knew_it, now, self.user_id)
-        self.reviews.add(review)      
-        self.users.save(user)         
+        self.reviews.add(review)
+        self.users.save(user)
         return review
 
     def next_due(self, project_name: str, deck_name: str) -> date | None:

@@ -19,12 +19,12 @@ def test_add_deck_to_project_and_check_len():
     deck = Deck('my_deck')
     project.add_deck(deck)
 
-    assert len(project.decks) == 1 
+    assert len(project.decks) == 1
 
 def test_project_with_spaces_only_name_is_refused():
     with pytest.raises(ValueError):
         Project('   ')
-        
+
 def test_project_empty_name_is_refused():
     with pytest.raises(ValueError):
         Project('')
@@ -76,6 +76,3 @@ def test_removing_unknown_deck():
 
     with pytest.raises(ValueError):
         project.remove_deck('A1 verbs')
-
-
-

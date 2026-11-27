@@ -51,8 +51,3 @@ def test_review_round_trip():
     assert loaded.box_before == review.box_before
     assert loaded.box_after == review.box_after
     assert loaded.id == "r1"
-
-
-
-
-

@@ -7,7 +7,7 @@ DUE = date(2026, 11, 10)
 def test_new_card_is_box1_and_active():
     card = Card("question", "answer", DUE, 1)
     assert card.status == CardStatus.ACTIVE
-    assert card.box == 1 
+    assert card.box == 1
     assert card.id is not None
 
 def test_two_new_cards_have_different_ids():
@@ -46,6 +46,3 @@ def test_is_overdue_if_due_yesterday():
 def test_is_not_overdue_if_due_yesterday_and_retired():
     card = Card("question", "answer", DUE, 1, status=CardStatus.RETIRED)
     assert card.is_overdue(DUE + timedelta(days=1)) is False
-
-
-

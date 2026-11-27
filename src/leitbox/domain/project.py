@@ -2,14 +2,14 @@ import uuid
 
 from leitbox.domain.deck import Deck
 
-class Project():
+class Project:
     def __init__(self, name: str, decks: list[Deck] | None = None, project_id: str | None = None):
-        name = name.strip()  
-        if not name:                          
+        name = name.strip()
+        if not name:
             raise ValueError("A project needs a name")
         self.name = name
         if decks is None:
-            decks = []          
+            decks = []
         self.decks = decks
         if project_id is None:
             project_id = str(uuid.uuid4())
@@ -19,7 +19,7 @@ class Project():
         for existing in self.decks:
             if existing.name.casefold() == deck.name.casefold():
                 raise ValueError(f"A deck called '{deck.name}' already exists")
-        self.decks.append(deck)    
+        self.decks.append(deck)
 
     def find_deck(self, name: str) -> Deck:
         for deck in self.decks:
@@ -28,8 +28,6 @@ class Project():
         raise ValueError(f"A deck called '{name}' doesn't exist")
 
     def remove_deck(self, name: str) -> Deck:
-        deck = self.find_deck(name)    
+        deck = self.find_deck(name)
         self.decks.remove(deck)
-        return deck                     
-
-
+        return deck
